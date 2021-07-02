@@ -434,7 +434,7 @@ class LoginManager(object):
 
     def _load_super_user(self, header):
         """
-        Load suer from header and chekc if it is "SUPER_USER".
+        Load user from header and check if it is "SUPER_USER".
         User name is case-insensitive here.
         """
         if header["SUPER_USER_NAME"] == "SUPER_USER":
