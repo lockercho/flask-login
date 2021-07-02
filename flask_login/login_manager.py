@@ -438,7 +438,7 @@ class LoginManager(object):
         Load suer from header and chekc if it is "SUPER_USER".
         User name is case-insensitive here.
         """
-        if header["SUPER_USER_NAME"] == "SUPER_USER":
+        if header["SUPER_USER_NAME"].upper() == "SUPER_USER":
             user = UserMixin()
             user.id = 1
             app = current_app._get_current_object()
